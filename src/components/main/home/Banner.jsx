@@ -9,7 +9,8 @@ const Banner = () => {
           WE ARE EVENT PROFESSIONALS
         </h1>
         <p className="mt-4 text-sm sm:text-base text-gray-200">
-          You Can Find Festivals, Parties, Conference, Fairs, Exhibitions, Speakers and more
+          You Can Find Festivals, Parties, Conference, Fairs, Exhibitions,
+          Speakers and more
         </p>
 
         <form className="mt-6 w-full flex flex-col sm:flex-row justify-center items-center gap-3 bg-white/90 rounded-lg p-3 sm:p-4 shadow-lg">
@@ -19,7 +20,7 @@ const Banner = () => {
 "
             className="w-full sm:w-auto flex-1 px-4 py-2 rounded-md text-gray-800 outline-none"
           />
-        
+
           <button
             type="submit"
             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md flex items-center gap-2"
