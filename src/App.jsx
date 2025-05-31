@@ -7,9 +7,10 @@ import MyBookings from "./pages/main/MyBookings";
 import Profile from "./pages/main/Profile";
 import Dashboard from "./pages/admin/Dashboard";
 import AddEvent from "./pages/admin/AddEvent";
-import AuthLayout  from "./layouts/AuthLayout";
+import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import EventDetails from "./pages/main/EventDetails";
 
 function App() {
   return (
@@ -17,7 +18,9 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="events" element={<Events />} />
+        <Route path="events-details/:id" element={<EventDetails />} />
         <Route path="my-bookings" element={<MyBookings />} />
+
         <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="/" element={<AuthLayout />}>
