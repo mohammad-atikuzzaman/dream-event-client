@@ -8,7 +8,7 @@ const Navbar = () => {
   const { user } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
   return (
-    <header className="px-4 py-2  shadow sticky top-0 bg-[#043341]   text-gray-100 z-50">
+    <header className="px-4 py-2  shadow sticky top-0 bg-white   text-black z-50">
       <div className="container flex justify-between items-center mx-auto relative">
         <div className="flex items-center gap-8">
           <a
