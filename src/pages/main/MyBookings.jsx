@@ -1,52 +1,116 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContextProvider";
 
 const MyBookings = () => {
-  // Dummy booked events data; replace with real data as needed
-  const [bookings, setBookings] = useState([
-    {
-      id: 1,
-      eventName: 'Music Concert',
-      eventDate: '2025-06-10',
-      tickets: 2,
-    },
-    {
-      id: 2,
-      eventName: 'Art Exhibition',
-      eventDate: '2025-07-05',
-      tickets: 1,
-    },
-    {
-      id: 3,
-      eventName: 'Tech Conference',
-      eventDate: '2025-08-15',
-      tickets: 3,
-    },
-  ]);
+  const { user } = useContext(AuthContext);
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  console.log(user?.email);
 
-  // Handler to cancel a booking by filtering it out from the list
-  const cancelBooking = (id) => {
-    setBookings((prev) => prev.filter((booking) => booking.id !== id));
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const res = await fetch(
+          `https://dream-event-back-end.vercel.app/api/events/booked?email=${user?.email}`
+        );
+        if (!res.ok) {
+          throw new Error("Failed to fetch bookings");
+        }
+        const data = await res.json();
+        setBookings(data);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, [user?.email]);
+
+  const cancelBooking = (_id) => {
+    setBookings((prev) => prev.filter((booking) => booking._id !== _id));
+    // Optional: Send DELETE or POST request to backend to cancel the booking
   };
 
+  const formatDate = (isoDate) => {
+    return new Date(isoDate).toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
   return (
-    <div>
-      <h2>My Bookings</h2>
+    <div className="max-w-5xl mx-auto p-4">
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+        My Bookings
+      </h2>
       {bookings.length === 0 ? (
-        <p>You have no bookings.</p>
+        <p className="text-center text-gray-600">You have no bookings.</p>
       ) : (
-        <ul>
-          {bookings.map(({ id, eventName, eventDate, tickets }) => (
-            <li key={id} style={{ marginBottom: '1rem' }}>
-              <div>
-                <strong>Event:</strong> {eventName}
+        <ul className="space-y-6">
+          {bookings.map((booking) => (
+            <li
+              key={booking._id}
+              className="bg-white shadow-md rounded-2xl p-6 flex flex-col md:flex-row gap-6 border border-gray-200"
+            >
+              <img
+                src={booking.imageLink}
+                alt={booking.eventName}
+                className="w-full md:w-60 h-40 object-cover rounded-xl"
+              />
+              <div className="flex-1 space-y-2">
+                <div>
+                  <span className="font-semibold text-gray-700">Event:</span>{" "}
+                  {booking.eventName}
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-700">Date:</span>{" "}
+                  {formatDate(booking.date)}
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-700">Location:</span>{" "}
+                  {booking.location}
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-700">Category:</span>{" "}
+                  {booking.category}
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-700">
+                    Organizer:
+                  </span>{" "}
+                  {booking.organizer?.name}
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-700">Contact:</span>{" "}
+                  {booking.organizer?.contact}
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-700">
+                    Description:
+                  </span>{" "}
+                  {booking.description}
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-700">
+                    Registration Fee:
+                  </span>{" "}
+                  ${booking.registrationFee}
+                </div>
+                <button
+                  onClick={() => cancelBooking(booking._id)}
+                  className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                >
+                  Cancel Booking
+                </button>
               </div>
-              <div>
-                <strong>Date:</strong> {eventDate}
-              </div>
-              <div>
-                <strong>Tickets:</strong> {tickets}
-              </div>
-              <button onClick={() => cancelBooking(id)}>Cancel Booking</button>
             </li>
           ))}
         </ul>
