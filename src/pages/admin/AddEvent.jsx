@@ -19,7 +19,7 @@ const AddEvent = () => {
     registrationFee: "",
   });
 
-  // Set default organizer info from logged-in user
+ 
   useEffect(() => {
     if (user) {
       setFormData((prev) => ({
@@ -77,7 +77,6 @@ const AddEvent = () => {
       console.log("Server response:", result);
       toast.success("Event added successfully!");
 
-      // Reset form and re-fill organizer info
       setFormData({
         eventName: "",
         date: "",
