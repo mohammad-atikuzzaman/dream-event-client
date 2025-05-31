@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Card from "../../card/Card";
+import Card from "../../shared/card/Card";
 
 const FeaturedEvents = () => {
   const [events, setEvents] = useState([]);
