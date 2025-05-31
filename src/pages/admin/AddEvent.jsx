@@ -19,7 +19,6 @@ const AddEvent = () => {
     registrationFee: "",
   });
 
- 
   useEffect(() => {
     if (user) {
       setFormData((prev) => ({
