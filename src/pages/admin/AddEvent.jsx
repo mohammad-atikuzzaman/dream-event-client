@@ -63,17 +63,19 @@ const AddEvent = () => {
     axios
       .post("http://localhost:3000/api/events/add", data)
       .then((res) => {
-        console.log(res)
-        setLoading(false);
-        toast.success("Event Added", {
-          theme: "colored",
-        });
-        // console.log(res);
+        const { code, message } = res.data;
+
+        if (code === 403) {
+          toast.warn(message);
+        } else {
+          toast.success("Event Added", { theme: "colored" });
+        }
       })
       .catch(() => {
         toast.error("Event adding failed");
+      })
+      .finally(() => {
         setLoading(false);
-        // console.error(err);
       });
   };
   return (

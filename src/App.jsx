@@ -11,6 +11,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import EventDetails from "./pages/main/EventDetails";
+import UserSecurity from "./privetRoutes/UserSecurity";
 
 function App() {
   return (
@@ -19,7 +20,14 @@ function App() {
         <Route index element={<Home />} />
         <Route path="events" element={<Events />} />
         <Route path="events-details/:id" element={<EventDetails />} />
-        <Route path="my-bookings" element={<MyBookings />} />
+        <Route
+          path="my-bookings"
+          element={
+            <UserSecurity>
+              <MyBookings />
+            </UserSecurity>
+          }
+        />
 
         <Route path="profile" element={<Profile />} />
       </Route>
