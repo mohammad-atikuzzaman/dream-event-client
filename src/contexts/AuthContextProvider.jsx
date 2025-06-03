@@ -9,8 +9,11 @@ import {
 } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import auth from "../firebase.init";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export const AuthContext = createContext(null);
+
 const googleProvider = new GoogleAuthProvider();
 
 const AuthContextProvider = ({ children }) => {
@@ -40,6 +43,15 @@ const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      axios(
+        `https://dream-event-back-end.vercel.app/api/users/isadmin?emailId=${currentUser?.email}`
+      )
+        .then((res) => setAdmin(res.data === "admin"))
+        .catch(() =>
+          toast.warn("Only admin Access", {
+            theme: "colored",
+          })
+        );
       setLoading(false);
     });
 

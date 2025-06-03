@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContextProvider";
+import axios from "axios";
+import { toast } from "react-toastify";
+import SingleBooking from "../../components/main/home/SingleBooking";
 
 const MyBookings = () => {
   const { user } = useContext(AuthContext);
   const [bookings, setBookings] = useState([]);
+  const [refetch, setRefetch] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log(user?.email);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -28,20 +31,7 @@ const MyBookings = () => {
     };
 
     fetchBookings();
-  }, [user?.email]);
-
-  const cancelBooking = (_id) => {
-    setBookings((prev) => prev.filter((booking) => booking._id !== _id));
-    // Optional: Send DELETE or POST request to backend to cancel the booking
-  };
-
-  const formatDate = (isoDate) => {
-    return new Date(isoDate).toLocaleDateString("en-GB", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  }, [user?.email, refetch]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -56,62 +46,13 @@ const MyBookings = () => {
       ) : (
         <ul className="space-y-6">
           {bookings.map((booking) => (
-            <li
+            <SingleBooking
               key={booking._id}
-              className="bg-white shadow-md rounded-2xl p-6 flex flex-col md:flex-row gap-6 border border-gray-200"
-            >
-              <img
-                src={booking.imageLink}
-                alt={booking.eventName}
-                className="w-full md:w-60 h-40 object-cover rounded-xl"
-              />
-              <div className="flex-1 space-y-2">
-                <div>
-                  <span className="font-semibold text-gray-700">Event:</span>{" "}
-                  {booking.eventName}
-                </div>
-                <div>
-                  <span className="font-semibold text-gray-700">Date:</span>{" "}
-                  {formatDate(booking.date)}
-                </div>
-                <div>
-                  <span className="font-semibold text-gray-700">Location:</span>{" "}
-                  {booking.location}
-                </div>
-                <div>
-                  <span className="font-semibold text-gray-700">Category:</span>{" "}
-                  {booking.category}
-                </div>
-                <div>
-                  <span className="font-semibold text-gray-700">
-                    Organizer:
-                  </span>{" "}
-                  {booking.organizer?.name}
-                </div>
-                <div>
-                  <span className="font-semibold text-gray-700">Contact:</span>{" "}
-                  {booking.organizer?.contact}
-                </div>
-                <div>
-                  <span className="font-semibold text-gray-700">
-                    Description:
-                  </span>{" "}
-                  {booking.description}
-                </div>
-                <div>
-                  <span className="font-semibold text-gray-700">
-                    Registration Fee:
-                  </span>{" "}
-                  ${booking.registrationFee}
-                </div>
-                <button
-                  onClick={() => cancelBooking(booking._id)}
-                  className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                >
-                  Cancel Booking
-                </button>
-              </div>
-            </li>
+              booking={booking}
+              setRefetch={setRefetch}
+              refetch={refetch}
+              user={user}
+            />
           ))}
         </ul>
       )}

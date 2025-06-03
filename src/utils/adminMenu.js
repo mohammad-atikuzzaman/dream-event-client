@@ -4,10 +4,6 @@ export const menuOptions = [
     show: "Dashboard",
   },
   {
-    path: "/dashboard/add-event",
-    show: "Add Event",
-  },
-  {
     path: "/dashboard/users",
     show: "Users",
   },

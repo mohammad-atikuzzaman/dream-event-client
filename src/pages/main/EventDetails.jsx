@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router";
 import { AuthContext } from "../../contexts/AuthContextProvider";
+import BookingModal from "../../components/main/booking/BookingModal";
 
 const EventDetails = () => {
   const { id } = useParams();
@@ -10,9 +11,6 @@ const EventDetails = () => {
   const [showModal, setShowModal] = useState(false);
 
   const { user } = useContext(AuthContext);
-
-  const [phone, setPhone] = useState("");
-  const [tickets, setTickets] = useState(1);
 
   useEffect(() => {
     axios
@@ -26,29 +24,6 @@ const EventDetails = () => {
         setLoading(false);
       });
   }, [id]);
-
-  const handleBooking = async () => {
-    try {
-      const bookingData = {
-        email: user.email,
-        phone,
-        noOfSit: tickets,
-      };
-
-      await axios.post(
-        `https://dream-event-back-end.vercel.app/api/events/book/${id}`,
-        bookingData
-      );
-
-      alert("Booking successful!");
-      setShowModal(false);
-      setPhone("");
-      setTickets(1);
-    } catch (err) {
-      console.error("Booking failed:", err);
-      alert("Booking failed. Try again.");
-    }
-  };
 
   if (loading) return <div className="text-center mt-10">Loading...</div>;
   if (!event) return <div className="text-center mt-10">Event not found.</div>;
@@ -116,54 +91,7 @@ const EventDetails = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-900 text-white p-6 rounded-xl w-full max-w-md space-y-4 relative">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-2 cursor-pointer right-3 text-gray-300 text-xl"
-            >
-              ×
-            </button>
-            <h2 className="text-2xl text-white text-center font-bold mb-4">
-              Register for {event.eventName}
-            </h2>
-            <div className="space-y-3">
-              <input
-                type="text"
-                value={user?.displayName || ""}
-                disabled
-                className="w-full border rounded px-3 py-2 bg-gray-700 text-white"
-              />
-              <input
-                type="email"
-                value={user?.email || ""}
-                disabled
-                className="w-full border rounded px-3 py-2 bg-gray-700 text-white"
-              />
-              <input
-                type="text"
-                placeholder="Phone Number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="w-full border rounded px-3 py-2 bg-gray-800 text-white"
-              />
-              <input
-                type="number"
-                placeholder="Number of Tickets"
-                value={tickets}
-                min={1}
-                onChange={(e) => setTickets(e.target.value)}
-                className="w-full border rounded px-3 py-2 bg-gray-800 text-white"
-              />
-            </div>
-            <button
-              onClick={handleBooking}
-              className="w-full bg-green-500 cursor-pointer text-white py-2 rounded-lg font-semibold mt-4"
-            >
-              Confirm Booking
-            </button>
-          </div>
-        </div>
+        <BookingModal user={user} setShowModal={setShowModal} id={id} />
       )}
     </div>
   );
