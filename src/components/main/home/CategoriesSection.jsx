@@ -8,14 +8,18 @@ const CategoriesSection = () => {
     axios("https://dream-event-back-end.vercel.app/api/events/categories").then(
       (res) => setCategories(res.data)
     );
-  }, []); 
+  }, []);
   // console.log(categories);
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-10 text-black">
-          Browse by Categories
-        </h2>
+        <section className="py-4 space-y-2 mb-4 rounded-xl bg-gray-100">
+          <h2 className="text-4xl sm:text-5xl font-extrabold drop-shadow-lg ">
+            Browse by Categories
+          </h2>
+          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam nobis at sapiente veritatis cupiditate quidem.</p>
+        </section>
+
         <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           {categories.map((cat, index) => (
             <div
