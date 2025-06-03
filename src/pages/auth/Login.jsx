@@ -3,22 +3,29 @@ import { TiArrowBack } from "react-icons/ti";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../contexts/AuthContextProvider";
 import GoogleLogin from "../../components/auth/GoogleLogin";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const { logInWithEmailPass, user } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // The login handler function
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    const data = { email, password };
-    // console.log(data);
+
     logInWithEmailPass(email, password)
-      .then((res) => alert(`${res.displayName} is login Successful`))
-      .catch((err) => alert(`${err.message}`));
+      .then(() => {
+        toast.success("Signin Successful", {
+          theme: "colored",
+        });
+      })
+      .catch((err) => console.error(err));
   };
 
+  // If any user signed in user will redirect on home page
   useEffect(() => {
     if (user) {
       navigate("/");

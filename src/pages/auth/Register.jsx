@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../contexts/AuthContextProvider";
 import GoogleLogin from "../../components/auth/GoogleLogin";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const photo =
   "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";
@@ -12,31 +13,37 @@ const Register = () => {
   const { registerWithEmailPass, updateUserProfile, user } =
     useContext(AuthContext);
   const navigate = useNavigate();
+
+  // user register function
   const handleRegister = (e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
-    // console.log(data)
+    // registering user in firebase using email and password
     registerWithEmailPass(email, password)
-      .then((res) => {
-        console.log(res);
-        updateUserProfile(name, photo).then((res2) => {
+      .then(() => {
+        // updating registered users name and photo
+        updateUserProfile(name, photo).then(() => {
+          // It will save user info on database
           axios
             .post("https://dream-event-back-end.vercel.app/api/auth/register", {
               name,
               email,
               photo,
             })
-            .then((res) => console.log(res.data, "from axios post"))
+            .then(() => console.log("Data saved on database"))
             .catch((err) => console.error(err));
-          alert(`Register successful`);
+          toast.success("Register Successful", {
+            theme: "colored",
+          });
         });
       })
       .catch((err) => console.error(err));
   };
 
+  // If user signed in user will redirect on home page
   useEffect(() => {
     if (user) {
       navigate("/");

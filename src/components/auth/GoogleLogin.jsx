@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContextProvider";
 import { FaGoogle } from "react-icons/fa";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const GoogleLogin = () => {
   const { logInWithGoogle } = useContext(AuthContext);
@@ -9,6 +10,10 @@ const GoogleLogin = () => {
     logInWithGoogle()
       .then(({ user }) => {
         // return console.log(user.email, user.displayName, user.photoURL);
+
+        toast.success("Signin Successful", {
+          theme:"colored"
+        });
         axios
           .post("https://dream-event-back-end.vercel.app/api/auth/register", {
             name: user?.displayName,
