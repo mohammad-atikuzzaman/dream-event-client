@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContextProvider";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const MyBookings = () => {
   const { user } = useContext(AuthContext);
   const [bookings, setBookings] = useState([]);
+  const [refetch, setRefetch] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   console.log(user?.email);
@@ -28,11 +31,21 @@ const MyBookings = () => {
     };
 
     fetchBookings();
-  }, [user?.email]);
+  }, [user?.email, refetch]);
 
-  const cancelBooking = (_id) => {
-    setBookings((prev) => prev.filter((booking) => booking._id !== _id));
-    // Optional: Send DELETE or POST request to backend to cancel the booking
+  const cancelBooking = (id) => {
+    // return console.log(id);
+    axios
+      .put(`http://localhost:3000/api/events/cancel/${id}`, {
+        email: user?.email,
+      })
+      .then(() => {
+        toast.warn("Event Delete Success", {
+          theme: "colored",
+        });
+        setRefetch(!refetch);
+      })
+      .catch((err) => console.error(err));
   };
 
   const formatDate = (isoDate) => {
@@ -106,7 +119,7 @@ const MyBookings = () => {
                 </div>
                 <button
                   onClick={() => cancelBooking(booking._id)}
-                  className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                  className="mt-4 cursor-pointer px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
                 >
                   Cancel Booking
                 </button>

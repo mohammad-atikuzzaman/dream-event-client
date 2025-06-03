@@ -90,7 +90,9 @@ const EventDetails = () => {
       </div>
 
       {/* Modal */}
-      {showModal && <BookingModal user={user} setShowModal={setShowModal} id={id} />}
+      {showModal && (
+        <BookingModal user={user} setShowModal={setShowModal} id={id} />
+      )}
     </div>
   );
 };

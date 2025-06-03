@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../contexts/AuthContextProvider";
+import axios from "axios";
 
 const AddEvent = () => {
   const { user } = useContext(AuthContext);
@@ -23,31 +24,40 @@ const AddEvent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const eventName = form.eventName;
-    const date = form.date;
-    const location = form.location;
-    const category = form.category;
-    const numberOfSeats = form.numberOfSeats;
-    const registrationDeadline = form.registrationDeadline;
-    const registrationFee = form.registrationFee;
+    const eventName = form.eventName.value;
+    const date = form.date.value;
+    const location = form.location.value;
+    const category = form.category.value;
+    const description = form.description.value;
+    const numberOfSeats = form.numberOfSeats.value;
+    const registrationDeadline = form.registrationDeadline.value;
+    const registrationFee = form.registrationFee.value;
+
     const organizer = {
-      organizerName: user?.displayName,
-      organizerContact: user?.email,
+      name: user?.displayName,
+      contact: user?.email,
     };
-    // const photoUrl = await handleImageUpload(image)
+
+    const imageLink = await handleImageUpload(image);
 
     const data = {
       eventName,
       date,
       location,
       category,
+      description,
       numberOfSeats,
+      imageLink,
+      organizer,
       registrationDeadline,
       registrationFee,
-      organizer, // photoUrl
     };
 
-    console.log(data);
+    // return console.log(data);
+    axios
+      .post("http://localhost:3000/api/events/add", data)
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
   };
   return (
     <section className="max-w-3xl mx-auto p-6 bg-white text-black rounded-xl shadow-md mt-10">
@@ -108,28 +118,6 @@ const AddEvent = () => {
           onChange={(e) => setImage(e.target.files[0])}
           className="w-full bg-red-500   p-2 rounded-md text-sm text-gray-100"
         />
-
-        {/* <input
-          type="text"
-          name="imageLink"
-          placeholder="Image URL"
-          className="w-full border p-2 rounded"
-        /> */}
-
-        {/* <input
-          type="text"
-          name="organizerName"
-          placeholder="Organizer Name"
-          className="w-full border p-2 rounded"
-          required
-        />
-        <input
-          type="email"
-          name="organizerContact"
-          placeholder="Organizer Contact Email"
-          className="w-full border p-2 rounded"
-          required
-        /> */}
         <input
           type="datetime-local"
           name="registrationDeadline"
