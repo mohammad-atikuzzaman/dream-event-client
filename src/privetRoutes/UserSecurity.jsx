@@ -15,10 +15,10 @@ const UserSecurity = ({ children }) => {
           You need to log in to view this page.
         </p>
         <Link
-          to="/"
+          to="/login"
           className="inline-block bg-red-500 text-white px-5 py-2 rounded hover:bg-red-600 transition"
         >
-          Back to Home
+          Login
         </Link>
       </div>
     );
