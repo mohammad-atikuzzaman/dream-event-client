@@ -21,10 +21,19 @@ const ReviewModal = ({ user, booking, setShowModal }) => {
       reviewText,
     };
 
-    console.log(reviewData);
+    // console.log(reviewData);
     axios
-      .post("https://dream-event-back-end.vercel.app/api/reviews/submit", reviewData)
-      .then((res) => console.log(res.data))
+      .post(
+        "https://dream-event-back-end.vercel.app/api/reviews/submit",
+        reviewData
+      )
+      .then((res) => {
+        setShowModal(false);
+        toast.success("Review Added", {
+          theme: "colored",
+        });
+        console.log(res.data);
+      })
       .catch((err) => console.error(err));
   };
 

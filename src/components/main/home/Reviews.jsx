@@ -21,7 +21,7 @@ const Reviews = () => {
           hic blanditiis rerum debitis. Ut, ipsa.
         </p>
       </section>
-      <section className="flex flex-wrap justify-center mt-4">
+      <section className="flex flex-wrap justify-center gap-4 mt-4">
         {reviews?.map((review, i) => (
           <Review key={i} review={review} />
         ))}
