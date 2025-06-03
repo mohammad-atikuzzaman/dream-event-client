@@ -1,11 +1,61 @@
-import React from 'react';
+import React from "react";
+import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContextProvider";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { Link } from "react-router";
 
-const AdminSecurity = () => {
+const AdminSecurity = ({ children }) => {
+  const { user } = useContext(AuthContext);
+  const [isAdmin, setIsAdmin] = useState(user);
+
+  useState(() => {
+    axios(`http://localhost:3000/api/users/isadmin?emailId=${user?.email}`)
+      .then((res) => setIsAdmin(res.data))
+      .catch(() =>
+        toast.warn("Only admin Access", {
+          theme: "colored",
+        })
+      );
+  }, [user?.email]);
+
+  if (!user) {
     return (
-        <div>
-            
-        </div>
+      <div className="flex flex-col items-center min-h-screen justify-center text-center p-6 bg-gray-50 rounded-lg shadow-md">
+        <h2 className="text-2xl font-semibold text-red-500 mb-2">
+          Access Denied
+        </h2>
+        <p className="text-gray-600 mb-4">
+          You need to log in to view this page.
+        </p>
+        <Link
+          to="/login"
+          className="inline-block bg-red-500 text-white px-5 py-2 rounded hover:bg-red-600 transition"
+        >
+          Login
+        </Link>
+      </div>
     );
+  }
+
+  if (isAdmin !== "admin") {
+    return (
+      <div className="flex flex-col items-center min-h-screen justify-center text-center p-6 bg-gray-50 rounded-lg shadow-md">
+        <h2 className="text-2xl font-semibold text-red-500 mb-2">
+          Access Denied
+        </h2>
+        <p className="text-gray-600 mb-4">Only Admin Access</p>
+        <Link
+          to="/"
+          className="inline-block bg-red-500 text-white px-5 py-2 rounded hover:bg-red-600 transition"
+        >
+          Back to Home
+        </Link>
+      </div>
+    );
+  }
+  return <>{children}</>;
 };
 
 export default AdminSecurity;

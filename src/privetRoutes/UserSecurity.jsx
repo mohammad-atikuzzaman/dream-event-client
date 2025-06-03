@@ -7,7 +7,7 @@ const UserSecurity = ({ children }) => {
 
   if (!user) {
     return (
-      <div className="flex flex-col items-center min-h-screen justify-center min-h-[60vh] text-center p-6 bg-gray-50 rounded-lg shadow-md">
+      <div className="flex flex-col items-center min-h-screen justify-center text-center p-6 bg-gray-50 rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold text-red-500 mb-2">
           Access Denied
         </h2>

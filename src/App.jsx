@@ -5,7 +5,6 @@ import Home from "./pages/main/Home";
 import Events from "./pages/main/Events";
 import MyBookings from "./pages/main/MyBookings";
 import Profile from "./pages/main/Profile";
-import Dashboard from "./pages/admin/Dashboard";
 import AddEvent from "./pages/admin/AddEvent";
 import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/auth/Login";
@@ -13,6 +12,8 @@ import Register from "./pages/auth/Register";
 import EventDetails from "./pages/main/EventDetails";
 import UserSecurity from "./privetRoutes/UserSecurity";
 import SearchPage from "./pages/main/SearchPage";
+import Users from "./pages/admin/Users";
+import AdminSecurity from "./privetRoutes/AdminSecurity";
 
 function App() {
   return (
@@ -38,8 +39,22 @@ function App() {
         <Route path="register" element={<Register />} />
       </Route>
       <Route path="/dashboard" element={<AdminLayout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="add-event" element={<AddEvent />} />
+        <Route
+          index
+          element={
+            <AdminSecurity>
+              <AddEvent />
+            </AdminSecurity>
+          }
+        />
+        <Route
+          path="users"
+          element={
+            <AdminSecurity>
+              <Users />
+            </AdminSecurity>
+          }
+        />
       </Route>
     </Routes>
   );
