@@ -20,7 +20,7 @@ const GoogleLogin = () => {
             email: user?.email,
             photo: user?.photoURL,
           })
-          .then((res) => console.log(res.data, "from axios post"))
+          .then(() => console.log("User Data saved on Database"))
           .catch((err) => console.error(err));
       })
       .catch((err) => console.error(err));

@@ -65,7 +65,7 @@ const Register = () => {
           </p>
         </div>
         <GoogleLogin />
-        <div className="divider divider-accent">
+        <div className="divider divider-secondary">
           Or Register With Credentials
         </div>
         <form onSubmit={handleRegister}>
