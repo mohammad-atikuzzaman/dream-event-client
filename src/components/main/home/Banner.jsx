@@ -1,5 +1,6 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
+import { Link } from "react-router";
 
 const Banner = () => {
   return (
@@ -30,9 +31,9 @@ const Banner = () => {
         </form>
 
         <div className="mt-6 flex flex-wrap justify-center gap-4">
-          <button className="bg-gray-900 hover:bg-gray-800 text-white px-6 py-2 rounded-md font-semibold shadow">
+          <Link to="#featured" className="bg-gray-900 hover:bg-gray-800 text-white px-6 py-2 rounded-md font-semibold shadow">
             Popular Events
-          </button>
+          </Link>
           <button className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-md font-semibold shadow">
             Latest Events
           </button>

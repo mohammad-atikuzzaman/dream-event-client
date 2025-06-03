@@ -24,14 +24,14 @@ const Register = () => {
         console.log(res);
         updateUserProfile(name, photo).then((res2) => {
           axios
-            .post("http://localhost:3000/api/auth/register", {
+            .post("https://dream-event-back-end.vercel.app/api/auth/register", {
               name,
               email,
-              password,
               photo,
             })
-            .then((res) => console.log(res.data, "from axios post"));
-          alert(`${res.displayName} register successful`);
+            .then((res) => console.log(res.data, "from axios post"))
+            .catch((err) => console.error(err));
+          alert(`Register successful`);
         });
       })
       .catch((err) => console.error(err));
@@ -44,13 +44,10 @@ const Register = () => {
   }, [user, navigate]);
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-200 bg-[url('/auth/background.jpg')] bg-cover bg-center">
-      <form
-        className="backdrop-blur-md bg-white/10  py-4 px-8  w-5/6 md:w-2/3 text-gray-100 rounded-lg "
-        onSubmit={handleRegister}
-      >
+      <div className="backdrop-blur-md bg-white/10  py-4 px-8  w-5/6 md:w-2/3 text-gray-100 rounded-lg ">
         <div className="mb-4">
           <Link title="Back to home" to="/">
-            <TiArrowBack className="text-2xl" />
+            <TiArrowBack className="text-2xl text-red-600" />
           </Link>
           <h2 className="text-2xl md:text-3xl text-center font-semibold ">
             Please Register
@@ -64,50 +61,52 @@ const Register = () => {
         <div className="divider divider-accent">
           Or Register With Credentials
         </div>
-        <div>
-          <label htmlFor="name">Name :</label>
-          <input
-            className="w-full outline-1 px-4 py-1 rounded-sm"
-            name="name"
-            id="name"
-            type="text"
-            placeholder="Name"
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email :</label>
-          <input
-            className="w-full outline-1 px-4 py-1 rounded-sm"
-            name="email"
-            id="email"
-            type="email"
-            placeholder="Email"
-          />
-        </div>
+        <form onSubmit={handleRegister}>
+          <div>
+            <label htmlFor="name">Name :</label>
+            <input
+              className="w-full outline-1 px-4 py-1 rounded-sm"
+              name="name"
+              id="name"
+              type="text"
+              placeholder="Name"
+            />
+          </div>
+          <div>
+            <label htmlFor="email">Email :</label>
+            <input
+              className="w-full outline-1 px-4 py-1 rounded-sm"
+              name="email"
+              id="email"
+              type="email"
+              placeholder="Email"
+            />
+          </div>
 
-        <div>
-          <label htmlFor="password">Password :</label>
-          <input
-            className="w-full outline-1 px-4 py-1 rounded-sm"
-            name="password"
-            id="password"
-            placeholder="Password"
-            type="password"
-          />
-        </div>
-        <button
-          className="w-full bg-gray-800 text-white mt-4 py-1 rounded-sm cursor-pointer hover:shadow shadow-accent hover:bg-gray-700 "
-          type="submit"
-        >
-          Register
-        </button>
+          <div>
+            <label htmlFor="password">Password :</label>
+            <input
+              className="w-full outline-1 px-4 py-1 rounded-sm"
+              name="password"
+              id="password"
+              placeholder="Password"
+              type="password"
+            />
+          </div>
+          <button
+            className="w-full bg-red-600 text-white mt-4 py-1 rounded-sm cursor-pointer hover:shadow shadow-secondary hover:bg-red-700 "
+            type="submit"
+          >
+            Register
+          </button>
+        </form>
         <p className="text-center block mt-8">
           Already have an account?{" "}
           <Link className="underline" to="/login">
             Login
           </Link>
         </p>
-      </form>
+      </div>
     </div>
   );
 };

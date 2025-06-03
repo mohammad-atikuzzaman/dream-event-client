@@ -11,6 +11,7 @@ import { createContext, useEffect, useState } from "react";
 import auth from "../firebase.init";
 
 export const AuthContext = createContext(null);
+
 const googleProvider = new GoogleAuthProvider();
 
 const AuthContextProvider = ({ children }) => {
