@@ -4,123 +4,76 @@ import { AuthContext } from "../../contexts/AuthContextProvider";
 
 const AddEvent = () => {
   const { user } = useContext(AuthContext);
+  const [image, setImage] = useState(null);
 
-  const [formData, setFormData] = useState({
-    eventName: "",
-    date: "",
-    location: "",
-    category: "",
-    description: "",
-    numberOfSeats: "",
-    imageLink: "",
-    organizerName: "",
-    organizerContact: "",
-    registrationDeadline: "",
-    registrationFee: "",
-  });
-
-  useEffect(() => {
-    if (user) {
-      setFormData((prev) => ({
-        ...prev,
-        organizerName: user.displayName || "",
-        organizerContact: user.email || "",
-      }));
-    }
-  }, [user]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleImageUpload = async (img) => {
+    const formData = new FormData();
+    formData.append("image", img);
+    const res = await fetch(
+      `https://api.imgbb.com/1/upload?key=66c36ebac8cfebbc76676fb0650e9ac5`, // Replace with real key
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    const data = await res.json();
+    return data?.data?.url;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const form = e.target;
+    const eventName = form.eventName;
+    const date = form.date;
+    const location = form.location;
+    const category = form.category;
+    const numberOfSeats = form.numberOfSeats;
+    const registrationDeadline = form.registrationDeadline;
+    const registrationFee = form.registrationFee;
+    const organizer = {
+      organizerName: user?.displayName,
+      organizerContact: user?.email,
+    };
+    // const photoUrl = await handleImageUpload(image)
 
-    const eventPayload = {
-      eventName: formData.eventName,
-      date: new Date(formData.date).toISOString(),
-      location: formData.location,
-      category: formData.category,
-      description: formData.description,
-      numberOfSeats: parseInt(formData.numberOfSeats, 10),
-      imageLink: formData.imageLink,
-      organizer: {
-        name: formData.organizerName,
-        contact: formData.organizerContact,
-      },
-      registrationDeadline: new Date(
-        formData.registrationDeadline
-      ).toISOString(),
-      registrationFee: parseFloat(formData.registrationFee),
+    const data = {
+      eventName,
+      date,
+      location,
+      category,
+      numberOfSeats,
+      registrationDeadline,
+      registrationFee,
+      organizer, // photoUrl
     };
 
-    try {
-      const response = await fetch(
-        "https://dream-event-back-end.vercel.app/api/events/add",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(eventPayload),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to add event");
-      }
-
-      const result = await response.json();
-      console.log("Server response:", result);
-      toast.success("Event added successfully!");
-
-      setFormData({
-        eventName: "",
-        date: "",
-        location: "",
-        category: "",
-        description: "",
-        numberOfSeats: "",
-        imageLink: "",
-        organizerName: user?.displayName || "",
-        organizerContact: user?.email || "",
-        registrationDeadline: "",
-        registrationFee: "",
-      });
-    } catch (error) {
-      console.error("Error submitting event:", error);
-      toast.error(`Error: ${error.message}`);
-    }
+    console.log(data);
   };
-
   return (
     <section className="max-w-3xl mx-auto p-6 bg-white text-black rounded-xl shadow-md mt-10">
       <h2 className="text-2xl font-bold mb-6 text-center">Add New Event</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
+        <label className="font-semibold" htmlFor="eventName">
+          Event Name
+        </label>
         <input
           type="text"
+          id="eventName"
           name="eventName"
-          value={formData.eventName}
-          onChange={handleChange}
           placeholder="Event Name"
           className="w-full border p-2 rounded"
           required
         />
+        <label className="font-semibold" htmlFor="eventName"></label>
         <input
           type="datetime-local"
           name="date"
-          value={formData.date}
-          onChange={handleChange}
           className="w-full border p-2 rounded"
           required
         />
         <input
           type="text"
           name="location"
-          value={formData.location}
-          onChange={handleChange}
           placeholder="Location"
           className="w-full border p-2 rounded"
           required
@@ -128,16 +81,12 @@ const AddEvent = () => {
         <input
           type="text"
           name="category"
-          value={formData.category}
-          onChange={handleChange}
           placeholder="Category (e.g., Music, Tech)"
           className="w-full border p-2 rounded"
           required
         />
         <textarea
           name="description"
-          value={formData.description}
-          onChange={handleChange}
           placeholder="Event Description"
           className="w-full border p-2 rounded"
           rows={3}
@@ -146,25 +95,30 @@ const AddEvent = () => {
         <input
           type="number"
           name="numberOfSeats"
-          value={formData.numberOfSeats}
-          onChange={handleChange}
           placeholder="Number of Seats"
           className="w-full border p-2 rounded"
           required
         />
+
+        {/* todo need to make a system for uploading seat's */}
         <input
+          type="file"
+          accept="image/*"
+          required
+          onChange={(e) => setImage(e.target.files[0])}
+          className="w-full bg-red-500   p-2 rounded-md text-sm text-gray-100"
+        />
+
+        {/* <input
           type="text"
           name="imageLink"
-          value={formData.imageLink}
-          onChange={handleChange}
           placeholder="Image URL"
           className="w-full border p-2 rounded"
-        />
-        <input
+        /> */}
+
+        {/* <input
           type="text"
           name="organizerName"
-          value={formData.organizerName}
-          onChange={handleChange}
           placeholder="Organizer Name"
           className="w-full border p-2 rounded"
           required
@@ -172,17 +126,13 @@ const AddEvent = () => {
         <input
           type="email"
           name="organizerContact"
-          value={formData.organizerContact}
-          onChange={handleChange}
           placeholder="Organizer Contact Email"
           className="w-full border p-2 rounded"
           required
-        />
+        /> */}
         <input
           type="datetime-local"
           name="registrationDeadline"
-          value={formData.registrationDeadline}
-          onChange={handleChange}
           placeholder="Registration Deadline"
           className="w-full border p-2 rounded"
           required
@@ -190,8 +140,6 @@ const AddEvent = () => {
         <input
           type="number"
           name="registrationFee"
-          value={formData.registrationFee}
-          onChange={handleChange}
           placeholder="Registration Fee (e.g., 500)"
           className="w-full border p-2 rounded"
           required
