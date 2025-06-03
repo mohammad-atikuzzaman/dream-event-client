@@ -12,6 +12,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import EventDetails from "./pages/main/EventDetails";
 import UserSecurity from "./privetRoutes/UserSecurity";
+import SearchPage from "./pages/main/SearchPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="events" element={<Events />} />
         <Route path="events-details/:id" element={<EventDetails />} />
+        <Route path="search/:text" element={<SearchPage />} />
         <Route
           path="my-bookings"
           element={

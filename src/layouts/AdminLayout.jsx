@@ -3,6 +3,7 @@ import AdminNav from "../components/admin/AdminNav";
 import { Link, Outlet } from "react-router";
 import { AuthContext } from "../contexts/AuthContextProvider";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const AdminLayout = () => {
   const { user } = useContext(AuthContext);
@@ -11,7 +12,11 @@ const AdminLayout = () => {
   useState(() => {
     axios(`http://localhost:3000/api/users/isadmin?emailId=${user?.email}`)
       .then((res) => setIsAdmin(res.data))
-      .catch((err) => console.err(err));
+      .catch(() =>
+        toast.warn("Only admin Access", {
+          theme: "colored",
+        })
+      );
   }, [user?.email]);
 
   if (!user) {
