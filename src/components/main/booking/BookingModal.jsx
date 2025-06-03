@@ -16,7 +16,7 @@ const BookingModal = ({ user, setShowModal, id }) => {
     // console.log(data);
 
     axios
-      .post(`http://localhost:3000/api/events/book/${id}`, data)
+      .post(`https://dream-event-back-end.vercel.app/api/events/book/${id}`, data)
       .then(() => {
         toast.success("Booking Success", {
           theme: "colored",

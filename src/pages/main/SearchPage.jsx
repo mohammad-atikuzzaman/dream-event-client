@@ -10,7 +10,7 @@ const SearchPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    axios(`http://localhost:3000/api/events/search?searchText=${text}`)
+    axios(`https://dream-event-back-end.vercel.app/api/events/search?searchText=${text}`)
       .then((res) => {
         setEvents(res.data);
         setLoading(false);

@@ -5,7 +5,7 @@ import Review from "./Review";
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   useEffect(() => {
-    axios("http://localhost:3000/api/reviews/all-reviews").then((res) =>
+    axios("https://dream-event-back-end.vercel.app/api/reviews/all-reviews").then((res) =>
       setReviews(res.data)
     );
   }, []);

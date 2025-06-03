@@ -5,7 +5,7 @@ const Users = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    axios("http://localhost:3000/api/users/all")
+    axios("https://dream-event-back-end.vercel.app/api/users/all")
       .then((res) => setUsers(res.data))
       .catch((err) => console.error(err));
   }, []);

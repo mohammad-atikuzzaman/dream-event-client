@@ -8,7 +8,7 @@ const SingleBooking = ({ booking, setRefetch, refetch, user }) => {
 
   const cancelBooking = (id) => {
     axios
-      .put(`http://localhost:3000/api/events/cancel/${id}`, {
+      .put(`https://dream-event-back-end.vercel.app/api/events/cancel/${id}`, {
         email: user?.email,
       })
       .then(() => {

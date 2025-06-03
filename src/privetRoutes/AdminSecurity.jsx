@@ -1,24 +1,9 @@
-import React from "react";
-import { useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContextProvider";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { Link } from "react-router";
 
 const AdminSecurity = ({ children }) => {
-  const { user } = useContext(AuthContext);
-  const [isAdmin, setIsAdmin] = useState(user);
-
-  useState(() => {
-    axios(`http://localhost:3000/api/users/isadmin?emailId=${user?.email}`)
-      .then((res) => setIsAdmin(res.data))
-      .catch(() =>
-        toast.warn("Only admin Access", {
-          theme: "colored",
-        })
-      );
-  }, [user?.email]);
+  const { user, admin } = useContext(AuthContext);
 
   if (!user) {
     return (
@@ -39,7 +24,7 @@ const AdminSecurity = ({ children }) => {
     );
   }
 
-  if (isAdmin !== "admin") {
+  if (!admin) {
     return (
       <div className="flex flex-col items-center min-h-screen justify-center text-center p-6 bg-gray-50 rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold text-red-500 mb-2">

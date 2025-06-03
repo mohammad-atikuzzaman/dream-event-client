@@ -61,7 +61,7 @@ const AddEvent = () => {
 
     // return console.log(data);
     axios
-      .post("http://localhost:3000/api/events/add", data)
+      .post("https://dream-event-back-end.vercel.app/api/events/add", data)
       .then((res) => {
         const { code, message } = res.data;
 

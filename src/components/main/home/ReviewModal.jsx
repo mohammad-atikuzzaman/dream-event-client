@@ -23,7 +23,7 @@ const ReviewModal = ({ user, booking, setShowModal }) => {
 
     console.log(reviewData);
     axios
-      .post("http://localhost:3000/api/reviews/submit", reviewData)
+      .post("https://dream-event-back-end.vercel.app/api/reviews/submit", reviewData)
       .then((res) => console.log(res.data))
       .catch((err) => console.error(err));
   };
